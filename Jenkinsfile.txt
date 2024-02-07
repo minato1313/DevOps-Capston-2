@@ -1,0 +1,56 @@
+Jenkins Script
+--------------
+
+
+pipeline{
+    agent none
+    environment {
+        DOCKERHUB_CREDENTIALS=credentials('36055715-431a-4dc3-81fe-c0df2f7f1b9e')
+    }
+    
+    stages{
+        stage('Hello'){
+            agent{ 
+                label 'Kub-master'
+            }
+            steps{
+                echo 'Hello World'
+            }
+        }
+        stage('git'){
+            agent{ 
+                label 'Kub-master'
+            }
+
+            steps{
+
+                git'https://github.com/intellipaat2/website.git'
+            }
+        }
+        stage('docker') {
+            agent { 
+                label 'Kub-master'
+            }
+
+            steps {
+
+                sh 'sudo docker build /home/ubuntu/jenkins/workspace/pipeline -t ritikdevoper123/demo1'
+                sh 'sudo echo $DOCKERHUB_CREDENTIALS_PSW | sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                sh 'sudo docker push ritikdevoper123/demo1'
+
+            }
+        }
+        stage('Kuberneets') {
+            agent { 
+                label 'Kub-master'
+            }
+
+            steps {
+
+                sh 'sudo kubectl create -f deploy.yml'
+                sh 'sudo kubectl create -f svc.yml'
+            }
+        }        
+        
+    }
+}
