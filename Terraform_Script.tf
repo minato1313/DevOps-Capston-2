@@ -20,18 +20,18 @@ provider "aws" {
 resource "aws_instance" "example" {
   ami = "ami-0283a57753b18025b"
   count = 2
-  instance_type = "t2.medium"
-  key_name = "hrithik"
+  instance_type = "t2.micro"
+  key_name = "virginia"
   tags = {
-    Name = "kub-s"
+    Name = "Kub-S"
   }
 }
 resource "aws_instance" "main" {
   ami = "ami-0283a57753b18025b"
   count = 1
   instance_type = "t2.medium"
-  key_name = "hrithik"
+  key_name = "virginia"
   tags = {
-     Name = "kub1-master"
+     Name = "Kub-Master"
   }
 }
